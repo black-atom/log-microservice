@@ -1,0 +1,9 @@
+{
+	"km_inicial": 10,
+    "km_final": 30,
+	"data_hora_inicial_km": "Tue Dec 19 2017 15:31:19 GMT-0200 (-02)",
+	"data_hora_final_km": "Tue Dec 19 2017 15:31:19 GMT-0200 (-02)",
+    "data_hora_inicial_virgente_local": "Tue Dec 19 2017 15:31:19 GMT-0200 (-02)",
+    "data_hora_final_virgente_local": "Tue Dec 19 2017 15:31:19 GMT-0200 (-02)",
+    "tipo_quilometragem": "almoco"
+}
