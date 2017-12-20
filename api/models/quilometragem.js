@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose'
-import databaseConnection from '../databaseConnection'
+import databaseConnection from '../../databaseConnection'
 
 const quilometragemSchema = new Schema({
     km_inicial: {
@@ -12,22 +12,22 @@ const quilometragemSchema = new Schema({
     },
     data_hora_inicial_km: {
         type: Date,
-        default: Date.now,
+        default: null,
         required: [true, 'Insira a data inicial.']
     },
     data_hora_final_km: {
         type: Date,
-        default: Date.now,
+        default: null,
         required: [true, 'Insira a data final.']
     },
     data_hora_inicial_virgente_local: {
         type: Date,
-        default: Date.now,
+        default: null,
         required: [true, 'Insira a data inicial virgente do local.']
     },
     data_hora_final_virgente_local: {
         type: Date,
-        default: Date.now,
+        default: null,
         required: [true, 'Insira a data final virgente do local.']
     },
     tipo_quilometragem: {
@@ -40,6 +40,9 @@ const quilometragemSchema = new Schema({
             'outros'
         ],
         required: [true, 'Selecione o tipo da quilometragem.']
+    },
+    id_atendimento: {
+        type: Schema.Types.ObjectId 
     }
 },{ versionKey: false }
 
