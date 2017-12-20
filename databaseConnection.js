@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
 import bluebird from 'bluebird'
+import config from './config/dbConfig'
 
-const dbConfig = require('./config/dbConfig')()
+const dbConfig = config();
 
 let db = null
 

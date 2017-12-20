@@ -1,4 +1,4 @@
-const getConfig = require('./index')
+import getConfig from './index'
 
 const config = getConfig({
     development: {
@@ -20,4 +20,4 @@ const config = getConfig({
     }
 }) 
 
-module.exports = config
+export default config
