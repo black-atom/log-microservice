@@ -1,4 +1,4 @@
-import Quilometragem from '../controllers/quilometragemController'
+import Quilometragem from '../api/models/quilometragem'
 import Promise from 'bluebird'
 import { prop } from 'ramda'
 
