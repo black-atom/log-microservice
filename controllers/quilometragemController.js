@@ -1,45 +1,54 @@
-import Quilometragem from '../models/quilometragem'
+import Quilometragem from '../controllers/quilometragemController'
 import Promise from 'bluebird'
 import { prop } from 'ramda'
 
 const getAll = async(req, res, next) => {
-    await Quilometragem.find(req.query)
-        .then(quilometragens => res.json(quilometragens))
-        .catch(error => next(error))
+    try {
+        const quilometragens = await Quilometragem.find(req.query)
+        res.json(quilometragens)
+    } catch (err) {
+        next(err)
+    }
 }
 
 const getQuilometragemByID = async(req, res, next) => {
-    const _id = prop('id', req.params)
-    await Quilometragem.findById(_id)
-        .then(quilometragem => res.json(quilometragem))
-        .catch(error => next(error))
+    try {
+        const _id = prop('id', req.params)
+        const quilometragem = await Quilometragem.findById(_id)
+        res.json(quilometragem)
+    } catch (err) {
+        next(err)
+    }
 }
 
-const SaveQuilometragem = async(req, res, next) => {
-    const quilometragem = prop('body', req)
-    const quilometragemModel = new Quilometragem(quilometragem)
-
-    await quilometragemModel.save()
-        .then(savedQuilometragem => res.json(savedQuilometragem))
-        .catch(error => next(error))
+const saveQuilometragem = async(req, res, next) => {
+    try {
+        const quilometragem = prop('body', req)
+        const quilometragemModel = new Quilometragem(quilometragem)
+        const newQuilometragem = await quilometragemModel.save()
+        res.json(newQuilometragem)
+    } catch (err) {
+        next(err)
+    }
 }
 
 const updateQuilometragem = async(req, res, next) => {
-    const quilometragem = prop('body', req)
-    const _id = prop('id', req.params)
-
-    await Quilometragem.findByIdAndUpdate(_id, quilometragem, {
-            runValidators: true
-        })
-        .then(updateQuilometragem => updateQuilometragem._id)
-        .then(id => Quilometragem.findById(id))
-        .then(updateData => res.json(updateData))
-        .catch(error => next(error))
+    try {
+        const quilometragem = prop('body', req)
+        const _id = prop('id', req.params)
+        const quilometragemUpdate = await Quilometragem
+            .findByIdAndUpdate(_id, quilometragem, {
+                runValidators: true
+            })
+        res.json(quilometragemUpdate)
+    } catch (err) {
+        next(err)
+    }
 }
 
-export {    
+export {
     getAll,
     getQuilometragemByID,
-    SaveQuilometragem,
+    saveQuilometragem,
     updateQuilometragem
 }
