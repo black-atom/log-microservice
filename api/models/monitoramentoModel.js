@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose'
 import databaseConnection from '../../databaseConnection'
 
-const quilometragemSchema = new Schema({
+const monitoramentoSchema = new Schema({
     km_inicial: {
         type: Number,
         required: [true, 'Insira a quilometragem inicial.']
@@ -30,7 +30,7 @@ const quilometragemSchema = new Schema({
         default: null,
         required: [true, 'Insira a data final virgente do local.']
     },
-    tipo_quilometragem: {
+    tipo: {
         type: String,
         enum: [
             'almoco',
@@ -48,4 +48,4 @@ const quilometragemSchema = new Schema({
 
 )
 
-export default databaseConnection.model('quilometragen', quilometragemSchema)
+export default databaseConnection.model('monitoramento', monitoramentoSchema)
