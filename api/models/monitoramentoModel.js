@@ -8,27 +8,23 @@ const monitoramentoSchema = new Schema({
     },
     km_final: {
         type: Number,
-        required: [true, 'Insira a quilometragem final.']
+        default: null,
     },
     data_hora_inicial_km: {
         type: Date,
         default: null,
-        required: [true, 'Insira a data inicial.']
     },
     data_hora_final_km: {
         type: Date,
         default: null,
-        required: [true, 'Insira a data final.']
     },
     data_hora_inicial_virgente_local: {
         type: Date,
         default: null,
-        required: [true, 'Insira a data inicial virgente do local.']
     },
     data_hora_final_virgente_local: {
         type: Date,
         default: null,
-        required: [true, 'Insira a data final virgente do local.']
     },
     tipo: {
         type: String,
@@ -41,8 +37,13 @@ const monitoramentoSchema = new Schema({
         ],
         required: [true, 'Selecione o tipo da quilometragem.']
     },
+    id_funcionario:  {
+        type: Schema.Types.ObjectId,
+        required: [true, 'Passe o id do funcionario.']
+    },
     id_atendimento: {
-        type: Schema.Types.ObjectId 
+        type: Schema.Types.ObjectId,
+        default: null
     }
 },{ versionKey: false }
 
