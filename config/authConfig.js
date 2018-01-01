@@ -1,7 +1,7 @@
 import R from 'ramda'
 import getConfig from './index'
 
-const config = getConfig({
+const getAuthConfig = getConfig({
     development: {
         bypass: true,
         secret: 'realponto'
@@ -19,4 +19,4 @@ const config = getConfig({
 
 })
 
-export { config } 
+export { getAuthConfig } 

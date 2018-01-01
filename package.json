@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon app.js --exec babel-node"
+    "start": "babel-node app.js",
+    "live": "nodemon app.js --exec babel-node"
   },
   "dependencies": {
     "babel": "^6.23.0",
@@ -14,6 +15,7 @@
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
+    "express-jwt": "^5.3.0",
     "mongoose": "^4.13.7",
     "morgan": "^1.9.0",
     "nodemon": "^1.13.3",
