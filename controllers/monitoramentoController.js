@@ -3,9 +3,18 @@ import Promise from 'bluebird'
 import { prop } from 'ramda'
 
 const getAll = async(req, res, next) => {
-    try {
-        const quilometragens = await Monitoramento.find(req.query)
-        res.json(quilometragens)
+
+    const skip = parseInt(req.query.skip);
+    const limit = parseInt(req.query.limit);
+
+    const query = { ...req.query };
+    delete query.skip;
+    delete query.limit;
+
+      try {
+        const monitoramentos = await Monitoramento.find(req.query).skip(skip).limit(limit);
+        const count = await Monitoramento.find(req.query).count();
+        res.json({ monitoramentos, count });
     } catch (err) {
         next(err)
     }
