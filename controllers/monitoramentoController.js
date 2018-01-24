@@ -3,9 +3,35 @@ import Promise from 'bluebird'
 import { prop } from 'ramda'
 
 const getAll = async(req, res, next) => {
+
+    const limit = parseInt(req.query.limit);
+    const skip = parseInt(req.query.skip);
+
+    let query = Object.assign({}, req.query);
+    delete query.skip;
+    delete query.limit;
+    
+    const time = { initial: { hh: 0, mm: 0, ss: 0 }, finish:  { hh: 23, mm: 59, ss: 1 }  };
+
+    const parseDate = dateStr => time =>  {
+        const date = new Date(dateStr);
+        const fomartedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.hh, time.mm, time.ss).toString();
+        return fomartedDate;
+    };
+
+    const parseQuery = prop => query => ({
+        $gte: new Date(parseDate(query[prop])(time.initial)), 
+        $lte: new Date(parseDate(query[prop])(time.finish))
+    });
+
+    for(let prop in query) {
+        query[prop] = prop.indexOf('data') > - 1 ? parseQuery(prop)(query) : query[prop];
+    }
+
     try {
-        const quilometragens = await Monitoramento.find(req.query)
-        res.json(quilometragens)
+        const quilometragens = await Monitoramento.find(query).skip(skip).limit(limit).sort( { data_hora_final_virgente_local: 1 } );
+        const count = await Monitoramento.find(query).count()
+        res.json({ quilometragens, count })
     } catch (err) {
         next(err)
     }
