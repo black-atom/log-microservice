@@ -24,8 +24,10 @@ const getAll = async(req, res, next) => {
         $lte: new Date(parseDate(query[prop])(time.finish))
     });
 
-    for(let prop in query) {
-        query[prop] = prop.indexOf('data') > - 1 ? parseQuery(prop)(query) : query[prop];
+     for(let prop in query) {
+        query[prop] = prop.indexOf('data') > - 1 && query[prop] !== null
+        ? parseQuery(prop)(query) 
+        : query[prop];
     }
 
     try {
