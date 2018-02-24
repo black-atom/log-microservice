@@ -24,10 +24,12 @@ const getAll = async(req, res, next) => {
         $lte: new Date(parseDate(query[prop])(time.finish))
     });
 
+    const parseNull = value => value === null || value === 'null' ? null : value;
+
      for(let prop in query) {
-        query[prop] = prop.indexOf('data') > - 1 && query[prop] !== null
+        query[prop] = prop.indexOf('data') > - 1 && query[prop] !== null && query[prop] !== 'null'
         ? parseQuery(prop)(query) 
-        : query[prop];
+        : parseNull(query[prop]);
     }
 
     try {
