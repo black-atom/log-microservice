@@ -1,22 +1,24 @@
-import R from 'ramda'
 import getConfig from './index'
 
-const getAuthConfig = getConfig({
+export const getAuthConfig = getConfig({
     development: {
         bypass: true,
-        secret: 'realponto'
+        secret: "realponto",
+        host: 'localhost',
+        port: 3000
     },
 
     test: {
         bypass: true,
-        secret: 'realponto'
+        secret: "realponto",
+        host: 'localhost',
+        port: 3000
     },
 
     production: {
         bypass: false,
-        secret: 'realponto'
+        secret: "realponto",
+        host: process.env.AUTH_API_HOST || 'localhost',
+        port: process.env.AUTH_API_PORT ||  3000
     }
-
-})
-
-export { getAuthConfig } 
+});
