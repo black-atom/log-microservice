@@ -1,4 +1,4 @@
-import Monitoramento from '../api/models/monitoramentoModel'
+import Monitoramento from '../api/models/atividadeSchema'
 import Promise from 'bluebird'
 import { prop } from 'ramda'
 
@@ -33,7 +33,7 @@ const getAll = async(req, res, next) => {
     }
 
     try {
-        const quilometragens = await Monitoramento.find(query).skip(skip).limit(limit).sort( { data_hora_final_virgente_local: 1 } );
+        const quilometragens = await Monitoramento.find(query).skip(skip).limit(limit).sort( { createdAt: 1 } );
         const count = await Monitoramento.find(query).count()
         res.json({ quilometragens, count })
     } catch (err) {
@@ -52,11 +52,22 @@ const getMonitoramentoByID = async(req, res, next) => {
 }
 
 const saveMonitoramento = async(req, res, next) => {
+    const monitoramento = prop('body', req)
+    const { atividade_id } = monitoramento;
     try {
-        const monitoramento = prop('body', req)
-        const monitoramentoModel = new Monitoramento(monitoramento)
-        const newMonitoramento = await monitoramentoModel.save()
-        res.json(newMonitoramento)
+      const newMonitoramento = await Monitoramento
+        .findOneAndUpdate({
+            atividade_id: atividade_id
+          },
+          monitoramento,
+          {
+            upsert: true,
+            setDefaultsOnInsert: true,
+            new: true,
+          }
+        )
+ 
+      res.json(newMonitoramento)
     } catch (err) {
         next(err)
     }
