@@ -6,6 +6,6 @@ const route = express.Router()
 route.get('/monitoramentos', getAll)
 route.get('/monitoramentos/:id', getMonitoramentoByID)
 route.post('/monitoramentos', saveMonitoramento)
-route.put('/monitoramentos/:id', updateMonitoramento)
+route.put('/monitoramentos/:id', saveMonitoramento)
 
 export default route

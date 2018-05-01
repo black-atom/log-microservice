@@ -6,36 +6,21 @@ import databaseConnection from './databaseConnection'
 import monitoramentoRouter from './api/routes/monitoramentoRouter'
 import jwt from 'express-jwt';
 import { getAuthConfig } from './config/authConfig'
+import authorizationMiddleware from 'photon-authorization-middleware'
 
-const authConfig = getAuthConfig()
+const { bypass, host, port: authPort } = getAuthConfig()
 const app = express()
 const port = process.env.PORT || 3000
 
 app.use(cors())
-app.use("/api", 
-  jwt({
-    secret: authConfig.secret,
-    credentialsRequired: !authConfig.bypass
-  }), 
-  (err, req, res, next) => {
-    if (err.name === 'UnauthorizedError') { 
-      return(res.status(401).send('Invalid authorization token'));
-    }
-  }
-);
+
 app.use(morgan('dev'))
 app.use(bodyParser.text())
 app.use(bodyParser.json())
 app.use(bodyParser.json({ type: 'application/json' }))
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use("/api", (req, res, next) => {
-
-    req.body.createdBy = (req.user && req.user._doc.login.username) ? req.user._doc.login.username : 'Ambiente de Test';
-    req.body.updatedBy = (req.user && req.user._doc.login.username) ? req.user._doc.login.username : 'Ambiente de Test';
-    
-     next();
-})
+app.use("/api", authorizationMiddleware(bypass, host, authPort));
   
 
 app.use('/api', monitoramentoRouter)

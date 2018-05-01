@@ -1,4 +1,4 @@
-import Monitoramento from '../api/models/monitoramentoModel'
+import Monitoramento from '../api/models/atividadeSchema'
 import Promise from 'bluebird'
 import { prop } from 'ramda'
 
@@ -22,23 +22,22 @@ const getAll = async(req, res, next) => {
     const parseQuery = prop => query => ({
         $gte: new Date(parseDate(query[prop])(time.initial)), 
         $lte: new Date(parseDate(query[prop])(time.finish))
-    });
+    })
 
-    const parseNull = value => value === null || value === 'null' ? null : value;
-
-     for(let prop in query) {
-        query[prop] = prop.indexOf('data') > - 1 && query[prop] !== null && query[prop] !== 'null'
-        ? parseQuery(prop)(query) 
-        : parseNull(query[prop]);
+    const getData = async(query) => {
+         try {
+            const atividades = await Monitoramento.find(query).skip(skip).limit(limit).sort( { createdAt: 1 } );
+            const count = await Monitoramento.find(query).count()
+            res.json({ atividades, count })
+        } catch (err) {
+            next(err)
+        }
     }
 
-    try {
-        const quilometragens = await Monitoramento.find(query).skip(skip).limit(limit).sort( { data_hora_final_virgente_local: 1 } );
-        const count = await Monitoramento.find(query).count()
-        res.json({ quilometragens, count })
-    } catch (err) {
-        next(err)
-    }
+   if(!query.createdAt) return getData(query)
+   
+   return getData(Object.assign({}, query, { createdAt: parseQuery('createdAt')(query) }));
+  
 }
 
 const getMonitoramentoByID = async(req, res, next) => {
@@ -52,11 +51,24 @@ const getMonitoramentoByID = async(req, res, next) => {
 }
 
 const saveMonitoramento = async(req, res, next) => {
+    const monitoramento = prop('body', req)
+    const { atividade_id } = monitoramento;
+
+    
     try {
-        const monitoramento = prop('body', req)
-        const monitoramentoModel = new Monitoramento(monitoramento)
-        const newMonitoramento = await monitoramentoModel.save()
-        res.json(newMonitoramento)
+      const newMonitoramento = await Monitoramento
+        .findOneAndUpdate({
+            atividade_id: atividade_id
+          },
+          monitoramento,
+          {
+            upsert: true,
+            setDefaultsOnInsert: true,
+            new: true,
+          }
+        )
+ 
+      res.json(newMonitoramento)
     } catch (err) {
         next(err)
     }
