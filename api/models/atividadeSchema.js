@@ -63,10 +63,7 @@ const atividadeSchema = new Schema({
         'CANCELA_ATIVIDADE',
       ],
     }
-},{ versionKey: false }
+},{ versionKey: false , timestamps: true })
 
-)
-
-atividadeSchema.plugin(timestamps);
 
 export default databaseConnection.model('atividade', atividadeSchema)
